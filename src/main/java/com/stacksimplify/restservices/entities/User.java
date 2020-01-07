@@ -10,11 +10,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import org.springframework.hateoas.*;
 
 //Entity
 @Entity // use name property to change the default entity name which is the class name
 @Table(name="user") // if the table name to be differnt from entity name, also schema property can be used if multiple schemas are configured
-public class User {
+public class User extends RepresentationModel<User> {
 	@Id() //With this annotation JPA makes this feild as Primarykey
 	@GeneratedValue // TO auto-generate
 	private Long id;
