@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 //Entity
 @Entity // use name property to change the default entity name which is the class name
@@ -15,9 +17,11 @@ public class User {
 	private Long id;
 	
 	@Column(name="USER_NAME", length = 50, nullable = false, unique = true)
+	@NotEmpty(message="Username is manadtory")
 	private String username;
 	
 	@Column(name="FIRST_NAME", length = 50, nullable = false)
+	@Size(min=2, message="Firstname should be more than two characters")
 	private String firstName;
 	
 	@Column(name="LAST_NAME", length = 50, nullable = false)
