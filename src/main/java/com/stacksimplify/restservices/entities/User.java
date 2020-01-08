@@ -12,13 +12,15 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import org.springframework.hateoas.*;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 //Entity
 @Entity // use name property to change the default entity name which is the class name
 @Table(name="user") // if the table name to be different from entity name, also schema property can be used if multiple schemas are configured
-@JsonIgnoreProperties({"firstName" ,  "lastName"}) //Static filtering by adding to fields to be ingonred by Jackson during serialization
+//@JsonIgnoreProperties({"firstName" ,  "lastName"}) //Static filtering by adding to fields to be ingonred by Jackson during serialization
+@JsonFilter(value="userFilter")
 public class User extends RepresentationModel<User> {
 	@Id() //With this annotation JPA makes this feild as Primarykey
 	@GeneratedValue // TO auto-generate
@@ -42,7 +44,7 @@ public class User extends RepresentationModel<User> {
 	private String role;
 	
 	@Column(name="SSN", length = 50, nullable = false, unique = true)
-	@JsonIgnore //This will ingnore this feild during Jackson parsing, it may lead to error during post or put as it is not a nullable field
+	//@JsonIgnore //This will ingnore this feild during Jackson parsing, it may lead to error during post or put as it is not a nullable field
 	private String ssn;
 	
 	@OneToMany(mappedBy = "user")
