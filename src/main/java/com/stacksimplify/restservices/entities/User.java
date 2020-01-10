@@ -15,39 +15,48 @@ import org.springframework.hateoas.*;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
 
 //Entity
 @Entity // use name property to change the default entity name which is the class name
 @Table(name="user") // if the table name to be different from entity name, also schema property can be used if multiple schemas are configured
 //@JsonIgnoreProperties({"firstName" ,  "lastName"}) //Static filtering by adding to fields to be ingonred by Jackson during serialization
-@JsonFilter(value="userFilter")
+//@JsonFilter(value="userFilter") //Used for MappingJacksonValue filtering
 public class User extends RepresentationModel<User> {
 	@Id() //With this annotation JPA makes this feild as Primarykey
 	@GeneratedValue // TO auto-generate
+	@JsonView(Views.External.class)
 	private Long id;
 	
 	@Column(name="USER_NAME", length = 50, nullable = false, unique = true)
 	@NotEmpty(message="Username is manadtory")
+	@JsonView(Views.External.class)
 	private String username;
 	
 	@Column(name="FIRST_NAME", length = 50, nullable = false)
 	@Size(min=2, message="Firstname should be more than two characters")
+	@JsonView(Views.External.class)
 	private String firstName;
 	
 	@Column(name="LAST_NAME", length = 50, nullable = false)
+	@JsonView(Views.External.class)
 	private String lastName;
 	
 	@Column(name="EMAIL_ADDRESS", length = 50, nullable = false)
+	@JsonView(Views.External.class)
 	private String email;
 	
 	@Column(name="ROLE", length = 50, nullable = false)
+	@JsonView(Views.Internal.class)
 	private String role;
 	
 	@Column(name="SSN", length = 50, nullable = false, unique = true)
+	@JsonView(Views.Internal.class)
 	//@JsonIgnore //This will ingnore this feild during Jackson parsing, it may lead to error during post or put as it is not a nullable field
 	private String ssn;
 	
 	@OneToMany(mappedBy = "user")
+	@JsonView(Views.Internal.class)
 	private List<Order> orders;
 
 	public List<Order> getOrders() {
