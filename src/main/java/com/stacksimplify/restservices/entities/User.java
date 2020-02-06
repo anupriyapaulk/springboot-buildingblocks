@@ -58,6 +58,11 @@ public class User extends RepresentationModel<User> {
 	@OneToMany(mappedBy = "user")
 	@JsonView(Views.Internal.class)
 	private List<Order> orders;
+	
+	@Column(name="ADDRESS", length = 200, nullable = true)
+	@JsonView(Views.Internal.class)
+	private String address;
+	
 
 	public List<Order> getOrders() {
 		return orders;
@@ -72,7 +77,9 @@ public class User extends RepresentationModel<User> {
 
 	}
 
-	public User(Long id, String username, String firstName, String lastName, String email, String role, String ssn) {
+	public User(Long id, @NotEmpty(message = "Username is manadtory") String username,
+			@Size(min = 2, message = "Firstname should be more than two characters") String firstName, String lastName,
+			String email, String role, String ssn, List<Order> orders, String address) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -81,6 +88,8 @@ public class User extends RepresentationModel<User> {
 		this.email = email;
 		this.role = role;
 		this.ssn = ssn;
+		this.orders = orders;
+		this.address = address;
 	}
 
 	public Long getId() {
@@ -138,12 +147,25 @@ public class User extends RepresentationModel<User> {
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
 	}
+	
+	
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+
 
 	// Optional required for bean logging and troubleshooting
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", email=" + email + ", role=" + role + ", ssn=" + ssn + "]";
+				+ ", email=" + email + ", role=" + role + ", ssn=" + ssn + ", orders=" + orders + ", address=" + address
+				+ "]";
 	}
 	
 }
