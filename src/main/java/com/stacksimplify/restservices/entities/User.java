@@ -17,27 +17,36 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 //Entity
+@ApiModel(description = "This modal is to create a user")
 @Entity // use name property to change the default entity name which is the class name
 @Table(name="user") // if the table name to be different from entity name, also schema property can be used if multiple schemas are configured
 //@JsonIgnoreProperties({"firstName" ,  "lastName"}) //Static filtering by adding to fields to be ingonred by Jackson during serialization
 //@JsonFilter(value="userFilter") //Used for MappingJacksonValue filtering
 public class User extends RepresentationModel<User> {
+	@ApiModelProperty(notes = "Auto generated unique id", required = true, position = 1)
 	@Id() //With this annotation JPA makes this feild as Primarykey
 	@GeneratedValue // TO auto-generate
 	@JsonView(Views.External.class)
 	private Long id;
 	
+	@ApiModelProperty(notes = "User name", example="abc123" , position = 2)
+	@Size(min=2, max=50, message="Username should be more than two characters")
 	@Column(name="USER_NAME", length = 50, nullable = false, unique = true)
 	@NotEmpty(message="Username is manadtory")
 	@JsonView(Views.External.class)
 	private String username;
 	
+	@ApiModelProperty(notes = "First name",  position = 3)
 	@Column(name="FIRST_NAME", length = 50, nullable = false)
-	@Size(min=2, message="Firstname should be more than two characters")
+	@Size(min=2, max=50, message="Firstname should be more than two characters")
 	@JsonView(Views.External.class)
 	private String firstName;
 	
+	@ApiModelProperty(notes = "First name", position = 2)
 	@Column(name="LAST_NAME", length = 50, nullable = false)
 	@JsonView(Views.External.class)
 	private String lastName;

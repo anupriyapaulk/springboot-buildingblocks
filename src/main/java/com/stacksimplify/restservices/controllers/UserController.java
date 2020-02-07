@@ -1,5 +1,6 @@
 package com.stacksimplify.restservices.controllers;
 
+import java.awt.PageAttributes.MediaType;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,11 @@ import com.stacksimplify.restservices.exception.UserNameNotFoundException;
 import com.stacksimplify.restservices.exception.UserNotFoundException;
 import com.stacksimplify.restservices.services.UserService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
+@Api(tags = "User management Restful service", value="UserController", description = "This is the controller for user services")
 @RestController
 @Validated
 @RequestMapping(value="/users")
@@ -37,13 +43,15 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping()
+	@ApiOperation(tags = "Service for listing all users", value = "get all users")
+	@GetMapping(produces = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
 	public List<User> getAllUsers () {
 		return userService.getAllUsers();
 	} 
 	
+	@ApiOperation(tags = "Service for listing all users", value = "create users")
 	@PostMapping()
-	public ResponseEntity<Void> createUser(@Valid @RequestBody User user, UriComponentsBuilder builder) {
+	public ResponseEntity<Void> createUser(@ApiParam("User details for the new user to be created") @Valid @RequestBody User user, UriComponentsBuilder builder) {
 		try {
 			
 			userService.createUser(user);
